@@ -36,12 +36,15 @@ if exist "%~dp0\bot.zip" (
     echo Decompressing zip file...
     powershell -Command "Expand-Archive -Path '%~dp0\bot.zip' -DestinationPath '%~dp0'"
     del "%~dp0\bot.zip"
+    echo file decompressed
 ) else (
     echo file decompressed
 )
 
 :: 安裝套件
+echo Installing packages...
 call npm i minecraft-data minecraft-protocol mineflayer prismarine-entity readline readline-sync silly-datetime moment-timezone
+echo packages installed
 
 :: 啟動 bot
 start node %~dp0/mcf-auto-place-bot-main/start.js
