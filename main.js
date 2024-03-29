@@ -51,8 +51,10 @@ const initBot = () => {
 
         await bot.chat(config.main_warp)
 
-        await bot.equip(registry.itemsByName[config.block].id, 'hand')
-        await bot._genericPlace(bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z)), new Vec3(0, -1, 0), { forceLook: 'ignore' })
+        for (const position of config.locations) {
+            await bot.equip(registry.itemsByName[config.block].id, 'hand')
+            await bot._genericPlace(bot.blockAt(new Vec3(position[0], position[1], position[2])), new Vec3(0, -1, 0), { forceLook: 'ignore' })
+        }
     });
 
     bot.on('blockUpdate', async (oldBlock, newBlock) => {
