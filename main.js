@@ -54,8 +54,16 @@ const initBot = () => {
         await bot.chat(config.main_warp)
 
         for (const position of config.locations) {
-            await bot.equip(registry.itemsByName[config.block].id, 'hand')
-            await bot._genericPlace(bot.blockAt(new Vec3(position[0], position[1], position[2])), new Vec3(0, -1, 0), { forceLook: 'ignore' })
+            console.log(`Placing block at ${position}`)
+            let block = bot.blockAt(new Vec3(position[0], position[1], position[2]))
+
+            try {
+                await bot.equip(registry.itemsByName[config.block].id, 'hand')
+            } catch (error) {}
+
+            if (block) {
+                await bot._genericPlace(bot.blockAt(new Vec3(position[0], position[1], position[2])), new Vec3(0, -1, 0), { forceLook: 'ignore' })
+            }
         }
     });
 
@@ -63,10 +71,16 @@ const initBot = () => {
         let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
 
         for (const position of config.locations) {
+            let block = bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z))
+
+            if (!block) continue
+
             if (newBlock.position.x === position[0] && newBlock.position.y === position[1] && newBlock.position.z === position[2] && oldBlock.position.x === position[0] && oldBlock.position.y === position[1] && oldBlock.position.z === position[2] && bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z)).type == 0) {
                 console.log(`Block update: ${oldBlock.name} at ${oldBlock.position} has been updated to ${newBlock.name} at ${newBlock.position}`)
-                await bot.equip(registry.itemsByName[config.block].id, 'hand')
-                await bot._genericPlace(bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z)), new Vec3(0, -1, 0), { forceLook: 'ignore' })
+                try {
+                    await bot.equip(registry.itemsByName[config.block].id, 'hand')
+                } catch (error) {}
+                await bot._genericPlace(block, new Vec3(0, -1, 0), { forceLook: 'ignore' })
             }
         }
     })
