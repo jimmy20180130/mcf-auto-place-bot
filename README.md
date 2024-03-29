@@ -1,0 +1,2 @@
+# mcf-auto-place-bot
+ 
