@@ -49,9 +49,9 @@ const initBot = () => {
             bot.chat(line)
         });
 
-        await bot.chat(config.main_warp)
-        
         let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
+
+        await bot.chat(config.main_warp)
 
         for (const position of config.locations) {
             await bot.equip(registry.itemsByName[config.block].id, 'hand')
