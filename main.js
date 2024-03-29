@@ -50,6 +50,8 @@ const initBot = () => {
         });
 
         await bot.chat(config.main_warp)
+        
+        let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
 
         for (const position of config.locations) {
             await bot.equip(registry.itemsByName[config.block].id, 'hand')
@@ -59,6 +61,7 @@ const initBot = () => {
 
     bot.on('blockUpdate', async (oldBlock, newBlock) => {
         let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
+
         for (const position of config.locations) {
             if (newBlock.position.x === position[0] && newBlock.position.y === position[1] && newBlock.position.z === position[2] && oldBlock.position.x === position[0] && oldBlock.position.y === position[1] && oldBlock.position.z === position[2] && bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z)).type == 0) {
                 console.log(`Block update: ${oldBlock.name} at ${oldBlock.position} has been updated to ${newBlock.name} at ${newBlock.position}`)
