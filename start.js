@@ -15,7 +15,7 @@ rl.on('line', async function (line) {
 });
 
 function startApp() {
-    appProcess = fork(__dirname + 'main.js', [], { silent: true })
+    appProcess = fork(__dirname + '/main.js', [], { silent: true })
 
     appProcess.stdout.on('data', (data) => {
         console.log(`${String(data).replace(/\n$/, '')}`);
