@@ -5,8 +5,10 @@ const fs = require("fs");
 const Vec3 = require('vec3')
 const inventoryViewer = require('mineflayer-web-inventory');
 const registry = require('prismarine-registry')('1.20.1')
+const path = require('path');
+const configFilePath = path.resolve(__dirname, 'config.json');
 
-let config = JSON.parse(fs.readFileSync(`${process.cwd()}/config.json`), 'utf8');
+let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
 
 let bot;
 
@@ -54,7 +56,7 @@ const initBot = () => {
     });
 
     bot.on('blockUpdate', async (oldBlock, newBlock) => {
-        let config = JSON.parse(fs.readFileSync(`${process.cwd()}/config.json`), 'utf8');
+        let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
         for (const position of config.locations) {
             if (newBlock.position.x === position[0] && newBlock.position.y === position[1] && newBlock.position.z === position[2] && oldBlock.position.x === position[0] && oldBlock.position.y === position[1] && oldBlock.position.z === position[2] && bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z)).type == 0) {
                 console.log(`Block update: ${oldBlock.name} at ${oldBlock.position} has been updated to ${newBlock.name} at ${newBlock.position}`)
