@@ -2,13 +2,17 @@
     "bot_args": {
         "host": "sg.mcfallout.net",
         "port": "25565",
-        "username": "jimmy.xiaoxi.tw@gmail.com",
+        "username": "example@example.com",
         "auth": "microsoft",
         "version": "1.20.1"
     },
     "main_warp": "/warp despondentreclus",
-    "locations": [
-        [-2372, 19, 5459]
+    "place_locations": [
+        
     ],
-    "block": "iron_ore"
+    "mine_locations": [
+        
+    ],
+    "block": "iron_ore",
+    "mine_tool": ""
 }

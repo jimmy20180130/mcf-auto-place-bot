@@ -59,18 +59,18 @@ const initBot = () => {
 
             try {
                 await bot.equip(registry.itemsByName[config.block].id, 'hand')
-            } catch (error) {}
 
-            if (block) {
-                await bot._genericPlace(bot.blockAt(new Vec3(position[0], position[1], position[2])), new Vec3(0, -1, 0), { forceLook: 'ignore' })
-            }
+                if (block) {
+                    await bot._genericPlace(bot.blockAt(new Vec3(position[0], position[1], position[2])), new Vec3(0, -1, 0), { forceLook: 'ignore' })
+                }
+            } catch (error) {}
         }
     });
 
     bot.on('blockUpdate', async (oldBlock, newBlock) => {
         let config = JSON.parse(fs.readFileSync(configFilePath), 'utf8');
 
-        for (const position of config.locations) {
+        for (const position of config.place_locations) {
             let block = bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z))
 
             if (!block) continue
@@ -79,8 +79,18 @@ const initBot = () => {
                 console.log(`Block update: ${oldBlock.name} at ${oldBlock.position} has been updated to ${newBlock.name} at ${newBlock.position}`)
                 try {
                     await bot.equip(registry.itemsByName[config.block].id, 'hand')
+                    await bot._genericPlace(block, new Vec3(0, -1, 0), { forceLook: 'ignore' })
                 } catch (error) {}
-                await bot._genericPlace(block, new Vec3(0, -1, 0), { forceLook: 'ignore' })
+            }
+        }
+
+        for (const position of config.mine_locations) {
+            if (newBlock.position.x === position[0] && newBlock.position.y === position[1] && newBlock.position.z === position[2] && oldBlock.position.x === position[0] && oldBlock.position.y === position[1] && oldBlock.position.z === position[2] && bot.blockAt(new Vec3(newBlock.position.x, newBlock.position.y, newBlock.position.z)).type !== 0) {
+                console.log(`Block update: ${oldBlock.name} at ${oldBlock.position} has been updated to ${newBlock.name} at ${newBlock.position}`)
+                try {
+                    await bot.equip(804, 'hand')
+                    await bot.dig(newBlock, 'ignore', 'raycast')
+                } catch (error) {}
             }
         }
     })
