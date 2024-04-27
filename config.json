@@ -14,5 +14,8 @@
         
     ],
     "block": "iron_ore",
-    "mine_tool": ""
+    "mine_tool": "",
+    "exp_warp": "/warp despondentreclus",
+    "mine_warp": "/warp despondentreclus",
+    "server": 1
 }

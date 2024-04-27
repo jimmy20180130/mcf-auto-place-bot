@@ -90,6 +90,42 @@ const initBot = () => {
                 try {
                     await bot.equip(804, 'hand')
                     await bot.dig(newBlock, 'ignore', 'raycast')
+
+                    let heldItem = bot.heldItem;
+                
+                    if (heldItem) {
+                        console.log(`手上工具耐久度: ${(heldItem.maxDurability-heldItem.durabilityUsed).toFixed()} / ${heldItem.maxDurability}`); // durability of held item
+                    }
+
+                    if ((Number(heldItem.maxDurability-heldItem.durabilityUsed).toFixed()) <= 200) {
+                        bot.chat(config.exp_warp)
+                        await new Promise(r => setTimeout(r, 1000));
+                        let now_durability = (Number(heldItem.maxDurability-heldItem.durabilityUsed).toFixed())
+
+                        const fix_pickaxe = new Promise(async (resolve, reject) => {
+                            while (now_durability < heldItem.maxDurability) {
+                                heldItem = bot.heldItem;
+                                await new Promise(r => setTimeout(r, 1000));
+                                now_durability = (Number(heldItem.maxDurability-heldItem.durabilityUsed).toFixed())
+                                console.log(now_durability)
+                            }
+
+                            resolve('fixed')
+                        })
+
+                        const timeoutpromise = new Promise((resolve, reject) => {
+                            timeout = setTimeout(() => {
+                                resolve('timeout')
+                            }, 30000)
+                        })
+
+                        await Promise.race([fix_pickaxe, timeoutpromise])
+
+                        bot.chat(config.mine_warp)
+                        await new Promise(r => setTimeout(r, 1000))
+                    }
+
+                    await new Promise(r => setTimeout(r, 100))
                 } catch (error) {}
             }
         }
